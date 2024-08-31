@@ -70,7 +70,7 @@ async def tts_endpoint(prompt: str, bg_tasks: BackgroundTasks):
         else:
             # Result has been requested, but rendering isn't complete.
             log.debug("NOT DONE YET: %s", tts_str)
-            return Response(status_code=status.HTTP_102_PROCESSING)
+            return Response(status_code=status.HTTP_202_ACCEPTED)
     else:
         # Result is not cached, which means we need to generate it.
         log.debug("MISS: %s", tts_str)
@@ -81,4 +81,4 @@ async def tts_endpoint(prompt: str, bg_tasks: BackgroundTasks):
         # Spawn background task.
         bg_tasks.add_task(render_audio, model, tokenizer, description_input_ids, tts_str, cache)
 
-        return Response(status_code=status.HTTP_102_PROCESSING)
+        return Response(status_code=status.HTTP_202_ACCEPTED)
